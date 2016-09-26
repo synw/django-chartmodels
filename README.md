@@ -27,6 +27,8 @@ url('^chartflo/', include('chartmodels.urls')),
 url('^charts/', include('chartmodels.urls')),
   ```
   
+Note: the templates use font-awesome and bootstrap, these libs need to be loaded in your main template.
+  
 Go to ``/charts/`` to see it in action.
 
 ## Screenshot
