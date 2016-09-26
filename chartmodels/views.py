@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from django.http.response import Http404
+from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import TemplateView
 from django.utils.html import strip_tags
@@ -22,7 +23,7 @@ class ChartsIndexView(TemplateView):
 
 
 class ChartAllModelsView(TemplateView):
-    template_name = "chartmodels/chart.html"
+    template_name = "chartmodels/chart_models.html"
     
     def get_context_data(self, **kwargs):
         if not self.request.user.is_superuser:
@@ -31,19 +32,27 @@ class ChartAllModelsView(TemplateView):
         charttype = "pie"
         if self.request.GET.has_key("c"):
             charttype = strip_tags(self.request.GET['c'])
-        P = ChartDataPack()
         dataset={}
         appmodels = get_all_apps_models()
+        num_apps = len(settings.INSTALLED_APPS)
+        num_models = 0
+        num_instances = 0
+        P = ChartDataPack()
         for appname in appmodels.keys():
             models = get_all_models(appname)
             for model in models:
                 q = model.objects.all()
                 num = P.count(q)
+                num_models += 1
+                num_instances += num
                 dataset[model.__name__] = num
         datapack = P.package("chart", "All models", dataset, True)
-        context['title'] = _(u"all models")
         datapack['legend'] = True
-        datapack['export'] = True
+        datapack['export'] = False
+        context['title'] = _(u"all models")
+        context['num_models'] = num_models
+        context['num_apps'] = num_apps
+        context['num_instances'] = num_instances
         context['datapack'] = datapack
         context['template_path'] = "chartflo/charts/"+charttype+".html"
         return context
