@@ -41,8 +41,7 @@ class ChartAllModelsView(TemplateView):
         for appname in appmodels.keys():
             models = get_all_models(appname)
             for model in models:
-                q = model.objects.all()
-                num = P.count(q)
+                num = model.objects.all().count()
                 num_models += 1
                 num_instances += num
                 dataset[model.__name__] = num
