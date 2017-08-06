@@ -1,18 +1,17 @@
-# -*- coding: utf-8 -*-
-
+from __future__ import print_function
 from django.http.response import Http404
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import TemplateView
 from django.utils.html import strip_tags
-from django.apps import apps
 from chartflo.factory import ChartDataPack
 from chartmodels.utils import get_all_apps_models, get_all_models
+from introspection.inspector import inspect
 
 
 class ChartsIndexView(TemplateView):
     template_name = "chartmodels/index.html"
-    
+
     def get_context_data(self, **kwargs):
         if not self.request.user.is_superuser:
             raise Http404
@@ -24,24 +23,29 @@ class ChartsIndexView(TemplateView):
 
 class ChartAllModelsView(TemplateView):
     template_name = "chartmodels/chart_models.html"
-    
+
     def get_context_data(self, **kwargs):
         if not self.request.user.is_superuser:
             raise Http404
         context = super(ChartAllModelsView, self).get_context_data(**kwargs)
         charttype = "pie"
-        if self.request.GET.has_key("c"):
+        if "c" in self.request.GET:
             charttype = strip_tags(self.request.GET['c'])
-        dataset={}
-        appmodels = get_all_apps_models()
+        dataset = {}
         num_apps = len(settings.INSTALLED_APPS)
         num_models = 0
         num_instances = 0
         P = ChartDataPack()
-        for appname in appmodels.keys():
-            models = get_all_models(appname)
+        for appname in inspect.appnames:
+            models, err = inspect.models(appname)
+            if err is not None:
+                print(err)
             for model in models:
-                num = model.objects.all().count()
+                try:
+                    num = model.objects.all().count()
+                except Exception as e:
+                    print(e)
+                    continue
                 num_models += 1
                 num_instances += num
                 dataset[model.__name__] = num
@@ -53,19 +57,19 @@ class ChartAllModelsView(TemplateView):
         context['num_apps'] = num_apps
         context['num_instances'] = num_instances
         context['datapack'] = datapack
-        context['template_path'] = "chartflo/charts/"+charttype+".html"
+        context['template_path'] = "chartflo/charts/" + charttype + ".html"
         return context
 
 
 class ChartAppView(TemplateView):
     template_name = 'chartmodels/chart.html'
-    
+
     def get_context_data(self, **kwargs):
         context = super(ChartAppView, self).get_context_data(**kwargs)
         charttype = "pie"
-        if self.request.GET.has_key("c"):
+        if "c" in self.request.GET:
             charttype = strip_tags(self.request.GET['c'])
-        dataset={}
+        dataset = {}
         P = ChartDataPack()
         appname = kwargs['app']
         models = get_all_models(appname)
@@ -73,10 +77,10 @@ class ChartAppView(TemplateView):
             try:
                 num = model.objects.all().count()
                 dataset[model.__name__] = num
-            except ImportError, e:
-                print str(e)+" Model not found"
+            except ImportError as e:
+                print(str(e) + " Model not found")
         datapack = P.package("chart", "Data", dataset)
         context['title'] = appname
         context['datapack'] = datapack
-        context['template_path'] = "chartflo/charts/"+charttype+".html"
+        context['template_path'] = "chartflo/charts/" + charttype + ".html"
         return context
