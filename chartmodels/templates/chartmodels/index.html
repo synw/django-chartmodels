@@ -1,47 +1,30 @@
-{% extends "base.html" %}
-{% load i18n %}
+{% load staticfiles i18n %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>{% trans 'Chartmodels' %}</title>
+    {% include "chartmodels/head.html" %}
+</head>
 
-{% block title %}{% trans "Apps" %}{% endblock %} 
-
-{% block content %}
-<style>
-.listblock {
-	display:inline-block;
-	max-width:25%;
-	min-width:18em;
-	margin-bottom:1.5em;
-}
-.list-group-item.active a, .list-group-item.active a:visited {
-	color:white;
-}
-</style>
-<a class="btn btn-default pull-right" style="margin-top:1em" href="{% url 'allmodels-chart' %}">
-	{% trans "All models" %}
-</a>
-<h1>Models</h1>
-{% for app, models in appmodels.items %}
-	{% if models %}
-		<div class="listblock">
-		<ul class="list-group">
-			<li class="list-group-item active">
-				{% if models|length > 1 %}
-					<a href="{% url 'app-chart' app %}"><i class="fa fa-pie-chart fa-lg"></i></a>&nbsp;
-					<a href="{% url 'app-chart' app %}?c=bar"><i class="fa fa-bar-chart fa-lg"></i></a>
-					<a href="{% url 'app-chart' app %}?c=pyramid"><i class="fa fa-sort-amount-asc fa-lg"></i></a>
-				{% endif %}
-				{% if models|length > 1 %}
-					<a href="{% url 'app-chart' app %}">{{ app }}</a>
-				{% else %}
-					{{ app }}
-				{% endif %}
-			</li>
-			{% for model in models %}
-				<li class="list-group-item">
-					{{ model }}
-				</li>
-			{% endfor %}
-		</ul>
+<body>
+<div id="app">
+	<div id="site_header">
+		{% include "chartmodels/header.html" %}
+	</div>
+	<div id="navbar">
+		{% include "chartmodels/navbar.html" %}
+	</div>
+	<div id="content" style="text-align:center;width:100%">
+		<div v-for="xapp in apps">
+			<h2 v-html="xapp.appname"></h2>
+			<div v-for="model in xapp.models">
+				<a href="" v-html="model"></a>
+			</div>
 		</div>
-	{% endif %}
-{% endfor %}
-{% endblock content %}
+	</div>
+</div>
+<script type="text/javascript">
+	{% include "chartmodels/app.js" %}
+</script>
+</body>
+</html>

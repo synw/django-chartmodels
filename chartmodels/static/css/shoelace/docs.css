@@ -1,0 +1,141 @@
+body {
+  border-top: solid .3rem var(--color-aqua);
+}
+
+main {
+  max-width: 45rem;
+  padding: 1rem;
+  margin: 2rem auto;
+}
+
+h1[id]:not(:first-child),
+h2[id]:not(:first-child),
+h3[id]:not(:first-child),
+h4[id]:not(:first-child) {
+  margin-top: 3rem;
+}
+
+h3[id],
+h4[id] {
+  color: var(--color-gray);
+}
+
+h1 img {
+  width: 24rem;
+  vertical-align: middle;
+}
+
+header {
+  border-bottom: solid var(--component-border-width) var(--component-border-color);
+  padding-bottom: var(--component-spacing);
+  margin-bottom: var(--component-spacing-big);
+}
+
+footer {
+  border-top: solid var(--component-border-width) var(--component-border-color);
+  text-align: center;
+  padding-top: var(--component-spacing-big);
+  margin-top: var(--component-spacing-big);
+}
+
+footer img {
+  width: 16rem;
+}
+
+/* Main headings and bookmark links */
+h2[id] {
+  border-bottom: solid var(--component-border-width) var(--component-border-color);
+  padding-bottom: .25rem;
+  margin-bottom: 1rem;
+}
+
+a.bookmark {
+  width: 1em;
+  text-align: right;
+  color: var(--color-silver);
+  margin-left: -1em;
+  display: inline-block;
+}
+
+a.bookmark:hover {
+  text-decoration: none;
+}
+
+@media (max-width: 45rem) {
+  a.bookmark {
+    width: auto;
+    margin-left: 0;
+  }
+}
+
+/* Column helpers */
+.two-column {
+  column-count: 2;
+  column-gap: 1rem;
+}
+
+@media (max-width: 50rem) {
+  .two-column {
+    column-count: 1;
+    column-gap: 0;
+  }
+}
+
+/* Sizing examples */
+.width-sizing-example {
+  border: solid 1px var(--component-border-color);
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.width-sizing-example div {
+  background: var(--color-primary);
+  color: white;
+  text-align: center;
+  padding: .25rem;
+  margin-bottom: 1rem;
+}
+
+.width-sizing-example div:last-child {
+  margin-bottom: 0;
+}
+
+.height-sizing-example {
+  border: solid 1px var(--component-border-color);
+  height: 15rem;
+  padding: 1rem .5rem;
+  margin-bottom: 1rem;
+}
+
+.height-sizing-example div {
+  width: calc(25% - 1rem);
+  float: left;
+  background: var(--color-primary);
+  color: white;
+  text-align: center;
+  padding: .25rem;
+  margin: 0 .5rem;
+}
+
+/* Loader example */
+.loader-example div {
+  float: left;
+  width: 6rem;
+  height: 6rem;
+  border: dashed 1px var(--component-border-color);
+  margin-right: .5rem;
+}
+
+/* Tabs example */
+.tabs-vertical-example {
+  display: grid;
+  grid-template-columns: 30% 70%;
+}
+
+.tabs-vertical-example .tabs-nav {
+  padding-right: 2rem;
+}
+
+.tabs-vertical-example .tabs-nav a {
+  display: block;
+}
