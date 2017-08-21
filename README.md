@@ -23,7 +23,6 @@ Installed apps:
 Urls:
 
   ```python
-url('^chartflo/', include('chartmodels.urls')),
 url('^charts/', include('chartmodels.urls')),
   ```
   
