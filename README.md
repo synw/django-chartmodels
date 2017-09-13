@@ -26,7 +26,13 @@ Urls:
    ```python
    url('^charts/', include('chartmodels.urls')),
    ```
-  
+
+Generate the charts:
+
+   ```
+   python3 manage.py runscript chartmodels
+   ```
+
 Go to ``/charts/`` to see it in action.
 
 Setting to excude certain models from the charts:
