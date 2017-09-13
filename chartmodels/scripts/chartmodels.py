@@ -23,7 +23,7 @@ def get_data():
         if appname in EXCLUDE:
             continue
         models, err = inspect.models(appname)
-        if len(models) < 2:
+        if len(models) < 1:
             continue
         if models is not None:
             for model in models:
