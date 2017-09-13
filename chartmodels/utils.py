@@ -32,19 +32,12 @@ def get_all_models(appname, names_only=False):
 
 def get_all_apps_models(names_only=False):
     allmodels = {}
-    for app in settings.INSTALLED_APPS:
-        models = get_all_models(app, names_only)
-        allmodels[app] = sorted(models)
+    for appname in settings.INSTALLED_APPS:
+        models = get_all_models(appname, names_only)
+        if "." in appname:
+            s = appname.split(".")
+            m = len(s) - 1
+            appname = s[m:][0]
+        print("AAP", appname)
+        allmodels[appname] = sorted(models)
     return allmodels
-
-
-"""
-def get_apps_and_models(names_only=False):
-    apps = []
-    models = []
-    allapps = get_all_apps_models(names_only)
-    for app in allapps.keys():
-        apps.append(app)
-        models.append(allapps[app])
-    return apps, models
-"""

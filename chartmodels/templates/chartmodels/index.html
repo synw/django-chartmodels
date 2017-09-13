@@ -11,36 +11,43 @@
 	min-width:18em;
 	margin-bottom:1.5em;
 }
-.list-group-item.active a, .list-group-item.active a:visited {
-	color:white;
+.titleblock, .activeblock {
+	background-color:lightgrey;
+	padding:0.3em;
+	text-align:center;
+	font-size:125%;
+}
+.titleblock {
+	color:black;
+}
+.activeblock a, .activeblock a:visited {
+	color:black !important;
+	font-weight:bold;
 }
 </style>
-<a class="btn btn-default pull-right" style="margin-top:1em" href="{% url 'allmodels-chart' %}">
-	{% trans "All models" %}
-</a>
-<h1>Models</h1>
+<span style="float:right;font-size:125%;font-weight:bolder">
+	[ <a style="margin-top:1em" href="{% url 'allmodels-chart' %}">
+		{% trans "Chart all models" %}
+	</a> ]
+</span>
+<h1>Apps</h1>
 {% for app, models in appmodels.items %}
 	{% if models %}
 		<div class="listblock">
-		<ul class="list-group">
-			<li class="list-group-item active">
-				{% if models|length > 1 %}
-					<a href="{% url 'app-chart' app %}"><i class="fa fa-pie-chart fa-lg"></i></a>&nbsp;
-					<a href="{% url 'app-chart' app %}?c=bar"><i class="fa fa-bar-chart fa-lg"></i></a>
-					<a href="{% url 'app-chart' app %}?c=pyramid"><i class="fa fa-sort-amount-asc fa-lg"></i></a>
-				{% endif %}
-				{% if models|length > 1 %}
-					<a href="{% url 'app-chart' app %}">{{ app }}</a>
-				{% else %}
-					{{ app }}
-				{% endif %}
-			</li>
-			{% for model in models %}
-				<li class="list-group-item">
-					{{ model }}
+			<ul>
+				<li class="{% if models|length > 1 %}activeblock{% else %}titleblock{% endif %}">
+					{% if models|length > 1 %}
+						<a href="{% url 'app-chart' app %}">{{ app }}</a>
+					{% else %}
+						{{ app }}
+					{% endif %}
 				</li>
-			{% endfor %}
-		</ul>
+				{% for model in models %}
+					<li>
+						{{ model }}
+					</li>
+				{% endfor %}
+			</ul>
 		</div>
 	{% endif %}
 {% endfor %}

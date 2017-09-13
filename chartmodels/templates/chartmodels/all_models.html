@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block title %}All models{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" media="screen, projection" href="{% static 'css/chartflo.css' %}" />
+{% include "chartflo/head.html" %}
+<h1>All models</h1>
+ <div>
+ 	{% include "chartflo/charts/all_models.html" %}
+ </div>
+{% endblock %}

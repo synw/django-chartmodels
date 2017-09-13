@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block title %}{{ model }}{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" media="screen, projection" href="{% static 'css/chartflo.css' %}" />
+{% include "chartflo/head.html" %}
+<h1>{{ model }}</h1>
+ <div>
+ 	{% include chart %}
+ </div>
+{% endblock %}
