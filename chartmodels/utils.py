@@ -38,6 +38,5 @@ def get_all_apps_models(names_only=False):
             s = appname.split(".")
             m = len(s) - 1
             appname = s[m:][0]
-        print("AAP", appname)
         allmodels[appname] = sorted(models)
     return allmodels
