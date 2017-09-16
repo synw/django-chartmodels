@@ -14,7 +14,6 @@ OK = "[" + color.bold_green("ok") + "] "
 
 
 def get_data():
-    global EXCLUDE
     dataset = {}
     num_models = 0
     num_instances = 0
