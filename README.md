@@ -33,7 +33,7 @@ Generate the charts:
    python3 manage.py runscript chartmodels
    ```
 
-Go to ``/charts/`` to see it in action.
+Go to ``/charts/`` to see it in action. For the users dashboard go to `/charts/users/`
 
 Setting to excude certain models from the charts:
 
