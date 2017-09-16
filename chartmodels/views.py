@@ -6,6 +6,10 @@ from django.views.generic import TemplateView
 from chartmodels.utils import get_all_apps_models
 
 
+class UsersDashView(TemplateView):
+    template_name = "chartmodels/dashboards/users.html"
+
+
 class AllModelsDashView(TemplateView):
     template_name = "chartmodels/all_models.html"
 
