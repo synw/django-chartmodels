@@ -91,7 +91,7 @@ def serialize_models():
     return err
 
 
-def run():
+def run(events):
     global EXCLUDE
     err = serialize_models()
     if err.exists:
