@@ -16,7 +16,6 @@ Installed apps:
 
    ```python
    "introspection",
-   "django_extensions",
    "chartflo",
    "chartmodels",
    ```
