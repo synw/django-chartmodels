@@ -9,7 +9,7 @@ Charts and stats for Django models using [Django Chartflo](https://github.com/sy
 
 Clone the latest [django-chartflo](https://github.com/synw/django-chartflo) master and install it
 
-Clone this repository and install dependencies: `pip install django-introspection`
+Clone this repository and install dependencies: `pip install django-introspection goerr blessings`
 
 Installed apps:
 
