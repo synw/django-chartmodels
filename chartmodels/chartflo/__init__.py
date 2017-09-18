@@ -61,7 +61,7 @@ def serialize_app(appname):
     height = 350
     slug = "app_" + appname
     name = "App " + appname
-    datapack = chart.serialize_count(
+    datapack = chart.serialize_from_dataset(
         dataset, x, y, chart_type=chart_type, width=width, height=height, color="model:N")
     chart, _ = Chart.objects.get_or_create(slug=slug)
     chart.generate(chart, slug, name, datapack)
@@ -83,7 +83,7 @@ def serialize_models():
     dataset, err = get_data()
     # print(dataset)
     chart = ChartController()
-    datapack = chart.serialize_count(
+    datapack = chart.serialize_from_dataset(
         dataset, x, y, chart_type=chart_type, width=width, height=height, color="model:N")
     chart, _ = Chart.objects.get_or_create(slug=slug)
     chart.generate(chart, slug, name, datapack)

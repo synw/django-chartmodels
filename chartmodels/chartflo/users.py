@@ -54,7 +54,7 @@ def generate_users():
     q = users.order_by("date_joined")
     x = ("date_joined", "date_joined:T", x_options)
     y = ("username", "count(username):Q")
-    chart.generate(
+    chart.generate_series(
         "date_joined", "Date joined", "line", q, x, y, 870, 180, GENERATOR,
         time_unit="yearmonth", verbose=True, modelnames="User"
     )
