@@ -41,16 +41,18 @@ def generate_users():
                  modelnames="User", generator=GENERATOR)
     # Last logins chart
     chart = ChartController()
-    x = ("last_login", "last_login:T")
+    x_options = {"labelAngle": 0.0, "axisWidth": 10.0}
+    x = ("last_login", "last_login:T", x_options)
     y = ("username", "count(username):Q")
     q = users.order_by("last_login")
-    chart.generate(
+    chart.generate_series(
         "last_logins", "Last logins", "line", q, x, y, 870, 180, GENERATOR,
         time_unit="yearmonth", verbose=True, modelnames="User"
     )
     # date joined chart
+    x_options = {"labelAngle": 0.0, "axisWidth": 10.0}
     q = users.order_by("date_joined")
-    x = ("date_joined", "date_joined:T")
+    x = ("date_joined", "date_joined:T", x_options)
     y = ("username", "count(username):Q")
     chart.generate(
         "date_joined", "Date joined", "line", q, x, y, 870, 180, GENERATOR,
