@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from chartflo.factory import ChartController, NumberController
 
 
-GENERATOR = "analytics"
+GENERATOR = "chartmodels"
 
 
 def generate_users():
