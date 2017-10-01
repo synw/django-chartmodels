@@ -29,7 +29,13 @@ Urls:
 Generate the charts:
 
    ```
-   python3 manage.py runscript chartmodels
+   python3 manage.py gen chartmodels
+   ```
+   
+To generate the users dashboard:
+
+   ```
+   python3 manage.py gen chartmodels.users
    ```
 
 Go to ``/charts/`` to see it in action. For the users dashboard go to `/charts/users/`
