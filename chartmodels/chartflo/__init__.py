@@ -7,7 +7,6 @@ from goerr import err
 from chartflo.factory import ChartController
 from chartflo.models import Chart
 from chartmodels.conf import EXCLUDE
-from .users import generate_users
 
 
 color = Terminal()
@@ -22,7 +21,7 @@ def get_data():
     for appname in inspect.appnames:
         if appname in EXCLUDE:
             continue
-        models, err = inspect.models(appname)
+        models = inspect.models(appname)
         if len(models) < 1:
             continue
         if models is not None:
@@ -36,16 +35,15 @@ def get_data():
                 num_models += 1
                 num_instances += num
                 dataset[model.__name__] = num
-    return dataset, err
+    return dataset
 
 
 def serialize_app(appname):
     dataset = {}
-    models, err = inspect.models(appname)
+    models = inspect.models(appname)
     if models is None:
-        return err
-    if err.exists:
-        err.trace()
+        err.new("No model found", serialize_app)
+        return
     for model in models:
         try:
             num = model.objects.all().count()
@@ -61,12 +59,10 @@ def serialize_app(appname):
     height = 350
     slug = "app_" + appname
     name = "App " + appname
-    datapack = chart.serialize_from_dataset(
-        dataset, x, y, chart_type=chart_type, width=width, height=height, color="model:N")
-    chart, _ = Chart.objects.get_or_create(slug=slug)
-    chart.generate(chart, slug, name, datapack)
+    chart.generate(slug, name, chart_type,
+                   dataset, x, y, width=width, height=height,
+                   generator="chartmodels.users", color="model:N")
     print(OK + "Chart", color.bold(slug), "saved")
-    return err
 
 
 def serialize_models():
@@ -80,26 +76,23 @@ def serialize_models():
     slug = "all_models"
     name = ""
     # get the dataset
-    dataset, err = get_data()
+    dataset = get_data()
     # print(dataset)
     chart = ChartController()
-    datapack = chart.serialize_from_dataset(
-        dataset, x, y, chart_type=chart_type, width=width, height=height, color="model:N")
-    chart, _ = Chart.objects.get_or_create(slug=slug)
-    chart.generate(chart, slug, name, datapack)
+    chart.generate(slug, name, chart_type,
+                   dataset, x, y, width=width, height=height,
+                   generator="chartmodels.users", color="model:N")
     print(OK + "Chart", color.bold(slug), "saved")
-    return err
 
 
 def run(events):
     global EXCLUDE
-    err = serialize_models()
+    serialize_models()
     if err.exists:
-        err.trace()
+        err.report()
     inspect.apps()
     for appname in inspect.appnames:
         if appname not in EXCLUDE:
-            err = serialize_app(appname)
-    generate_users()
+            serialize_app(appname)
     if err.exists:
-        err.trace()
+        err.report()

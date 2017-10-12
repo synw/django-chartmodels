@@ -8,7 +8,7 @@ from chartflo.factory import ChartController, NumberController
 GENERATOR = "chartmodels"
 
 
-def generate_users():
+def run(events=None):
     """
     Run the job
     """
@@ -45,7 +45,7 @@ def generate_users():
     x = ("last_login", "last_login:T", x_options)
     y = ("username", "count(username):Q")
     q = users.order_by("last_login")
-    chart.generate_series(
+    chart.generate(
         "last_logins", "Last logins", "line", q, x, y, 870, 180, GENERATOR,
         time_unit="yearmonth", verbose=True, modelnames="User"
     )
@@ -54,7 +54,7 @@ def generate_users():
     q = users.order_by("date_joined")
     x = ("date_joined", "date_joined:T", x_options)
     y = ("username", "count(username):Q")
-    chart.generate_series(
+    chart.generate(
         "date_joined", "Date joined", "line", q, x, y, 870, 180, GENERATOR,
         time_unit="yearmonth", verbose=True, modelnames="User"
     )
