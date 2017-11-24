@@ -2,15 +2,14 @@
 
 from __future__ import print_function
 from introspection.inspector import inspect
-from blessings import Terminal
 from goerr import err
-from chartflo.factory import ChartController
+from goerr.colors import colors
+from chartflo.charts import chart
 from chartflo.models import Chart
 from chartmodels.conf import EXCLUDE
 
 
-color = Terminal()
-OK = "[" + color.bold_green("ok") + "] "
+OK = "[" + colors.bold("ok") + "] "
 
 
 def get_data():
@@ -22,6 +21,9 @@ def get_data():
         if appname in EXCLUDE:
             continue
         models = inspect.models(appname)
+        if err.exists:
+            err.new(get_data, "Can not get models data")
+            return
         if len(models) < 1:
             continue
         if models is not None:
@@ -39,6 +41,7 @@ def get_data():
 
 
 def serialize_app(appname):
+    global OK
     dataset = {}
     models = inspect.models(appname)
     if models is None:
@@ -47,46 +50,44 @@ def serialize_app(appname):
     for model in models:
         try:
             num = model.objects.all().count()
-            dataset[model.__name__] = num
+            modelname = model.__name__
+            dataset[modelname] = num
+            # chart
+            x = ("model", "model:N")
+            y = ("instances", "instances:Q")
+            opts = dict(width=960, height=350)
+            c = chart.draw(dataset, x, y, "bar", opts=opts)
+            chart.stack(modelname, modelname, c)
+            print(OK + "Chart", colors.bold(appname), "saved")
         except ImportError as e:
             err.new(e + " Model not found")
-    # chart
-    chart = ChartController()
-    chart_type = "bar"
-    x = ("model", "model:N")
-    y = ("instances", "instances:Q")
-    width = 960
-    height = 350
-    slug = "app_" + appname
-    name = "App " + appname
-    chart.generate(slug, name, chart_type,
-                   dataset, x, y, width=width, height=height,
-                   generator="chartmodels.users", color="model:N")
-    print(OK + "Chart", color.bold(slug), "saved")
+            return
 
 
 def serialize_models():
     global OK
     print("Serializing models...")
-    chart_type = "bar"
-    x = ("model", "model:N")
+    x_opts = dict(color="model:N", labelAngle=-45, labelPadding=15)
+    x = ("model", "model:N", x_opts)
     y = ("number", "number:Q")
-    width = 1000
-    height = 500
-    slug = "all_models"
-    name = ""
+    slug = "index"
+    title = "All models"
     # get the dataset
     dataset = get_data()
+    if err.exists:
+        err.report()
     # print(dataset)
-    chart = ChartController()
-    chart.generate(slug, name, chart_type,
-                   dataset, x, y, width=width, height=height,
-                   generator="chartmodels.users", color="model:N")
-    print(OK + "Chart", color.bold(slug), "saved")
+    opts = dict(width=1000, height=400)
+    c = chart.draw(dataset, x, y, "bar", opts=opts)
+    chart.stack(slug, "", c)
+    if err.exists:
+        err.report()
+    print(OK + "Chart", colors.bold(title), "saved")
 
 
-def run(events):
+def run(events=None):
     global EXCLUDE
+    chart.engine = "altair"
     serialize_models()
     if err.exists:
         err.report()
@@ -94,5 +95,6 @@ def run(events):
     for appname in inspect.appnames:
         if appname not in EXCLUDE:
             serialize_app(appname)
+    chart.export("dashboards/chartmodels")
     if err.exists:
         err.report()

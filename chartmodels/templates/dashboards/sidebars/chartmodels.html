@@ -1,0 +1,15 @@
+{% load chartmodels_tags %}
+
+<ul class="sidebar-menu" data-widget="tree">
+	<li class="header">Models</li>
+	<li class="treeview active">
+		<ul class="treeview-menu">
+		{% modelnames as mods %}
+		{% for model in mods %}
+			<li>
+				<a href="javascript:loadDashboard('{{ model }}','chartmodels')">{{ model }}</a>
+			</li>
+		{% endfor %}
+		</ul>
+	</li>
+</ul>
